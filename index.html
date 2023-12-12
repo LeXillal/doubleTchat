@@ -1,0 +1,91 @@
+<html>
+
+<head>
+    <title>Home</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+
+<body>
+    <div class="messageContent">
+
+    </div>
+    <style>
+        .messageContent {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            overflow-y: scroll;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: flex-start;
+            padding: 10px;
+        }
+
+        .messageContent div {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .messageContent div img {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            margin-left: 10px;
+            border-radius: 5px;
+        }
+
+        .messageContent div span {
+            font-size: 20px;
+            font-weight: 400;
+            color: #000;
+        }
+
+        .userName {
+            font-size: 16px;
+            font-weight: bold;
+            color: #000;
+            margin-right: 10px;
+        }
+
+        body {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #6d6b74;
+        }
+    </style>
+
+</html>
+<!-- get socket.io -->
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io();
+    const messageBox = document.querySelector('.messageContent')
+    socket.on('message', function (data) {
+        console.log(data);
+        const message = document.createElement('div');
+        message.innerHTML = `
+            <span>${getTime()}</span>
+            <img src="${data.platform}.svg" alt="${data.platform}" class="platform">
+            <span class="userName">${data.user} :</span>
+            <span>${data.message}</span>
+        `
+        messageBox.appendChild(message);
+        console.log(message);
+        messageBox.scrollTop = messageBox.scrollHeight;
+    });
+    function getTime() {
+        const date = new Date();
+        const hour = date.getHours();
+        const minute = date.getMinutes();
+        const second = date.getSeconds();
+        return `${hour}:${minute}`;
+    }
+</script>
